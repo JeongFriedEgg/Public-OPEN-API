@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="java.util.*" %>
+<%@ page import="service.BookmarkService" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -33,13 +34,6 @@
         button {
             padding: 8px 16px;
             cursor: pointer;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #0056b3;
         }
 
     </style>
@@ -47,6 +41,48 @@
 <body>
 
 <h2>와이파이 상세 정보</h2>
+
+<div id="bookmark-section">
+    <h3>북마크 목록</h3>
+    <form method="get">
+        <label for="bookmark">북마크 선택:</label>
+        <select name="bookmark" id="bookmark">
+            <option value="">-- 선택하세요 --</option>
+            <%
+                BookmarkService bookmarkService = new BookmarkService();
+                List<Map<String, String>> bookmarks = bookmarkService.getBookmarks();
+
+                if (bookmarks != null && !bookmarks.isEmpty()) {
+                    for (Map<String, String> bookmark : bookmarks) {
+                        String id = bookmark.get("id");
+                        String name = bookmark.get("name");
+            %>
+                        <option value="<%= id %>"><%= name %></option>
+            <%
+                    }
+                } else {
+                    out.println("<option value=''>저장된 북마크가 없습니다.</option>");
+                }
+            %>
+        </select>
+        <button type="submit">북마크 추가하기</button>
+    </form>
+
+    <%
+        String selectedBookmark = request.getParameter("bookmark");
+        if (selectedBookmark != null && !selectedBookmark.isEmpty()) {
+            BookmarkService service = new BookmarkService();
+            Map<String, String> bookmark = service.getBookmarkById(selectedBookmark);
+            if (bookmark != null) {
+    %>
+                <p><strong>선택된 북마크:</strong> <%= bookmark.get("name") %></p>
+    <%
+            } else {
+                out.println("<p>선택된 북마크를 찾을 수 없습니다.</p>");
+            }
+        }
+    %>
+</div>
 
 <div class="detail-container">
     <table>
