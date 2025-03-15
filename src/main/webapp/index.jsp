@@ -88,7 +88,10 @@
             <td><%= wifi.get("distance") %></td>
             <td><%= wifi.get("X_SWIFI_MGR_NO") %></td>
             <td><%= wifi.get("X_SWIFI_WRDOFC") %></td>
-            <td><%= wifi.get("X_SWIFI_MAIN_NM") %></td>
+            <td><a href="wifiDetail.jsp?mgrNo=<%= wifi.get("X_SWIFI_MGR_NO") %>&lat=<%= wifi.get("LAT") %>&lon=<%= wifi.get("LNT") %>&distance=<%= wifi.get("distance") %>&address1=<%= wifi.get("X_SWIFI_ADRES1") %>&address2=<%= wifi.get("X_SWIFI_ADRES2") %>&floor=<%= wifi.get("X_SWIFI_INSTL_FLOOR") %>&instlType=<%= wifi.get("X_SWIFI_INSTL_TY") %>&instlMby=<%= wifi.get("X_SWIFI_INSTL_MBY") %>&svcSe=<%= wifi.get("X_SWIFI_SVC_SE") %>&cnstcYear=<%= wifi.get("X_SWIFI_CNSTC_YEAR") %>&inOutDoor=<%= wifi.get("X_SWIFI_INOUT_DOOR") %>&remars3=<%= wifi.get("X_SWIFI_REMARS3") %>&workDttm=<%= wifi.get("WORK_DTTM") %>">
+                                    <%= wifi.get("X_SWIFI_MAIN_NM") %>
+                                </a>
+            </td>
             <td><%= wifi.get("X_SWIFI_ADRES1") %></td>
             <td><%= wifi.get("X_SWIFI_ADRES2") %></td>
             <td><%= wifi.get("X_SWIFI_INSTL_FLOOR") %></td>
