@@ -25,9 +25,12 @@
 
 #### 북마크 서비스 기능 시연
 
+https://github.com/user-attachments/assets/aafcd50d-9708-49dd-8149-7bb664eb2eec
+
 
 #### 와이파이 서비스, 히스토리 기능 시연
 
+https://github.com/user-attachments/assets/ae66c136-1ba3-4dbf-81eb-33043a3b3c42
 
 
 ## ✅ ERD 설계
