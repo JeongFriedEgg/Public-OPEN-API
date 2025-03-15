@@ -84,4 +84,63 @@ public class BookmarkService {
         return rowsAffected > 0;
 
     }
+
+    public Map<String, String> getBookmarkById(String id) throws SQLException, ClassNotFoundException {
+        Map<String, String> bookmarkInfo = new HashMap<>();
+        Connection sqliteConnection = getSQLiteConnection();
+
+        String sql = "SELECT id, name, orders, created_date, updated_date FROM bookmarks WHERE id = ?";
+        try (PreparedStatement pstmt = sqliteConnection.prepareStatement(sql)) {
+            pstmt.setString(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    bookmarkInfo.put("id", rs.getString("id"));
+                    bookmarkInfo.put("name", rs.getString("name"));
+                    bookmarkInfo.put("orders", rs.getString("orders"));
+                    bookmarkInfo.put("created_date", rs.getString("created_date"));
+                    bookmarkInfo.put("updated_date", rs.getString("updated_date"));
+                }
+            }
+        } finally {
+            sqliteConnection.close();
+        }
+        return bookmarkInfo;
+    }
+
+    public boolean updateBookmark(String id, String name, String orders) throws SQLException, ClassNotFoundException {
+        String sql = "UPDATE bookmarks SET name = ?, orders = ?, updated_date = ? WHERE id = ?";
+
+        // 현재 날짜/시간을 문자열로 생성 (ISO-8601 형식 또는 원하는 포맷)
+        LocalDateTime now = LocalDateTime.now();
+        String formattedDateTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        Connection conn = getSQLiteConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            stmt.setString(2, orders);
+            stmt.setString(3, formattedDateTime); // updated_date
+            stmt.setString(4, id);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } finally {
+            conn.close();
+        }
+    }
+
+    public boolean deleteBookmark(String id) throws SQLException, ClassNotFoundException {
+        String sql = "DELETE FROM bookmarks WHERE id = ?";
+
+        Connection conn = getSQLiteConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, id);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } finally {
+            conn.close();
+        }
+    }
+
 }

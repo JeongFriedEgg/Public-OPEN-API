@@ -57,6 +57,13 @@
             <td><%= bookmark.get("orders") %></td>
             <td><%= bookmark.get("created_date") %></td>
             <td><%= bookmark.get("updated_date") %></td>
+            <td>
+                <a href="editBookmark.jsp?id=<%= bookmark.get("id") %>"><button>수정</button></a>
+                <form method="post" action="deleteBookmark.jsp" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= bookmark.get("id") %>">
+                    <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+                </form>
+            </td>
         </tr>
         <%
                 }
