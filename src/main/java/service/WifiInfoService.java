@@ -6,11 +6,10 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.*;
 import java.io.*;
 import java.net.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 
 public class WifiInfoService {
 
@@ -184,5 +183,78 @@ public class WifiInfoService {
                         Math.sin(dLon / 2) * Math.sin(dLon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c;
+    }
+
+    public boolean addBookmarkHistory(String bookmarkId, String wifiId) throws SQLException, ClassNotFoundException {
+        String sql = "INSERT INTO history (bookmark_id, wifi_id, created_date) VALUES (?, ?, ?)";
+        Connection conn = getSQLiteConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        pstmt.setString(1, bookmarkId);
+        pstmt.setString(2, wifiId);
+        pstmt.setString(3, currentDate);
+
+        int rowsAffected = pstmt.executeUpdate();
+        return rowsAffected > 0;
+    }
+
+    public List<Map<String, String>> getHistory() throws SQLException, ClassNotFoundException {
+        List<Map<String, String>> historyList = new ArrayList<>();
+        String sql = "SELECT id, bookmark_id, wifi_id, created_date FROM history";
+
+        Connection conn = getSQLiteConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+
+        while (rs.next()) {
+            Map<String, String> historyRecord = new HashMap<>();
+            String historyId = rs.getString("id");
+            String bookmarkId = rs.getString("bookmark_id");
+            String wifiId = rs.getString("wifi_id");
+            String createdDate = rs.getString("created_date");
+
+            String bookmarkName = getBookmarkNameById(bookmarkId, conn);
+
+            String wifiName = getWifiNameById(wifiId, conn);
+
+
+            historyRecord.put("history_id", historyId);
+            historyRecord.put("bookmark_name", bookmarkName);
+            historyRecord.put("wifi_name", wifiName);
+            historyRecord.put("created_date", createdDate);
+
+            historyList.add(historyRecord);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return historyList;
+    }
+
+    private String getBookmarkNameById(String bookmarkId, Connection conn) throws SQLException {
+        String sql = "SELECT name FROM bookmarks WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, bookmarkId);
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            return rs.getString("name");
+        }
+        return "알 수 없음";
+    }
+
+    private String getWifiNameById(String wifiId, Connection conn) throws SQLException {
+        String sql = "SELECT wifi_name FROM wifi_info WHERE manager_no = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, wifiId);
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            return rs.getString("wifi_name");
+        }
+        return "알 수 없음";
     }
 }

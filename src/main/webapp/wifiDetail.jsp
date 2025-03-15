@@ -44,7 +44,7 @@
 
 <div id="bookmark-section">
     <h3>북마크 목록</h3>
-    <form method="get">
+    <form method="post" action="addHistory.jsp">
         <label for="bookmark">북마크 선택:</label>
         <select name="bookmark" id="bookmark">
             <option value="">-- 선택하세요 --</option>
@@ -65,6 +65,7 @@
                 }
             %>
         </select>
+        <input type="hidden" name="mgrNo" value="<%= request.getParameter("mgrNo") %>" />
         <button type="submit">북마크 추가하기</button>
     </form>
 
