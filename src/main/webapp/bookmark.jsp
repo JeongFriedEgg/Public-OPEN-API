@@ -21,12 +21,16 @@
         th {
             background-color: #f4f4f4;
         }
+        button {
+            padding: 8px 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <h2>북마크 목록</h2>
-
+<a href="addBookmark.jsp" ><button>북마크 추가</button></a>
 <table>
     <thead>
         <tr>
@@ -53,7 +57,6 @@
             <td><%= bookmark.get("orders") %></td>
             <td><%= bookmark.get("created_date") %></td>
             <td><%= bookmark.get("updated_date") %></td>
-            <td><%= bookmark.get("remarks") %></td>
         </tr>
         <%
                 }

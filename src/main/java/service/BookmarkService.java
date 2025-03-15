@@ -4,7 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static java.sql.DriverManager.getConnection;
 
 public class BookmarkService {
     private String dbUrl;
@@ -57,6 +61,27 @@ public class BookmarkService {
 
     private Connection getSQLiteConnection() throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
-        return DriverManager.getConnection(dbUrl);
+        return getConnection(dbUrl);
+    }
+
+
+    public boolean addBookmark(String name, int order) throws ClassNotFoundException, SQLException {
+        String sql = "INSERT INTO bookmarks (name, orders, created_date, updated_date) VALUES (?, ?, ?, ?)";
+
+        // 현재 날짜/시간을 문자열로 생성 (ISO-8601 형식 or 원하는 포맷)
+        LocalDateTime now = LocalDateTime.now();
+        String formattedDateTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        Connection conn = getSQLiteConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+
+        stmt.setString(1, name);
+        stmt.setInt(2, order);
+        stmt.setString(3, formattedDateTime); // created_date
+        stmt.setString(4, formattedDateTime); // updated_date
+
+        int rowsAffected = stmt.executeUpdate();
+        return rowsAffected > 0;
+
     }
 }
