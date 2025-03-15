@@ -39,6 +39,8 @@
 
 <h2>서울시 공공 와이파이 정보 조회</h2>
 
+<a href="bookmark.jsp"><button>북마크 페이지</button></a>
+
 <div id="input-section">
     <form method="get" action="index.jsp">
         위도(lat): <input type="text" name="lat" placeholder="위도" value="<%= request.getParameter("lat") == null ? "" : request.getParameter("lat") %>">
