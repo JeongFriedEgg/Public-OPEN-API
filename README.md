@@ -48,11 +48,13 @@ https://github.com/user-attachments/assets/ae66c136-1ba3-4dbf-81eb-33043a3b3c42
 
 ```java
 private String dbUrl;
+private String apiKey;
 
 public WifiInfoService() throws IOException {
-  Properties properties = new Properties();
-  loadProperties(properties);
-  dbUrl = properties.getProperty("db.url");
+    Properties properties = new Properties();
+    loadProperties(properties);
+    dbUrl = properties.getProperty("db.url");
+    apiKey = properties.getProperty("api.key");
 }
 
 private void loadProperties(Properties properties) throws SQLException {
@@ -65,6 +67,13 @@ private void loadProperties(Properties properties) throws SQLException {
         throw new SQLException("Error loading properties file", e);
     }
 }
+
+private List<Map<String, String>> fetchWifiData(double userLat, double userLon) throws IOException, ParserConfigurationException, SAXException {
+    String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/xml/TbPublicWifiInfo/1/20/";
+  
+    String xmlData = makeApiRequest(apiUrl);
+    return parseXmlData(xmlData, userLat, userLon);
+}
 ```
 소스코드에서 db 연결설정을 위해 프로젝트 디렉터리에 포함된 ```wifi.db```의 경로값을 가져와야 합니다.
 프로젝트를 진행하는 과정에서 경로를 깃허브에 노출하지 않도록 하기 위해, ```/src/main/resources``` 하위 경로에 ```config.properties``` 파일을 추가하고 경로 설정을 추가하였습니다. 프로젝트 실행을 위해 다음과 같은 설정이 필요합니다.
@@ -72,6 +81,13 @@ private void loadProperties(Properties properties) throws SQLException {
 - 예시
 ```properties
 db.url=jdbc:sqlite:/(상위 경로)/public-open-api/wifi.db
+```
+
+api key는 해당 홈페이지에 로그인하여 발급받은 후, 위의 데이터베이스 경로 설정과 동일하게 설정을 추가하여야 합니다.
+
+- 예시
+```properties
+api.key=56714d7964776XXXXXXXXXXXXXXX
 ```
 
 ## ✅ 기술적 이슈

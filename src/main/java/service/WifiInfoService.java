@@ -14,11 +14,13 @@ import java.util.Date;
 public class WifiInfoService {
 
     private String dbUrl;
+    private String apiKey;
 
     public WifiInfoService() throws IOException {
         Properties properties = new Properties();
         loadProperties(properties);
         dbUrl = properties.getProperty("db.url");
+        apiKey = properties.getProperty("api.key");
     }
 
     private void loadProperties(Properties properties) throws IOException {
@@ -38,7 +40,6 @@ public class WifiInfoService {
     }
 
     private List<Map<String, String>> fetchWifiData(double userLat, double userLon) throws IOException, ParserConfigurationException, SAXException {
-        String apiKey = "56714d796477696236307672454373"; // 실제 키 사용
         String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/xml/TbPublicWifiInfo/1/20/";
 
         String xmlData = makeApiRequest(apiUrl);
