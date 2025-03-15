@@ -115,7 +115,24 @@ public class WifiInfoService {
     }
 
     private void insertWifiInfo(Connection conn, Map<String, String> wifiInfo) throws SQLException {
-        String sql = "INSERT INTO wifi_info (distance, manager_no, district, wifi_name, road_address, detailed_address, install_location, install_type, install_agency, service_type, install_year, indoor_outdoor, wifi_environment, latitude, longitude, work_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO wifi_info (distance, manager_no, district, wifi_name, road_address, detailed_address, install_location, install_type, install_agency, service_type, install_year, indoor_outdoor, wifi_environment, latitude, longitude, work_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                "ON CONFLICT(manager_no) DO UPDATE SET " +
+                "distance = excluded.distance, " +
+                "district = excluded.district, " +
+                "wifi_name = excluded.wifi_name, " +
+                "road_address = excluded.road_address, " +
+                "detailed_address = excluded.detailed_address, " +
+                "install_location = excluded.install_location, " +
+                "install_type = excluded.install_type, " +
+                "install_agency = excluded.install_agency, " +
+                "service_type = excluded.service_type, " +
+                "install_year = excluded.install_year, " +
+                "indoor_outdoor = excluded.indoor_outdoor, " +
+                "wifi_environment = excluded.wifi_environment, " +
+                "latitude = excluded.latitude, " +
+                "longitude = excluded.longitude, " +
+                "work_date = excluded.work_date";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, wifiInfo.get("distance"));
