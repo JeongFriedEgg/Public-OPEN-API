@@ -48,6 +48,7 @@
             <label for="order">순서</label>
             <input type="text" id="order" name="order" required>
         </div>
+        <a href="bookmark.jsp" class="btn">돌아가기</a>
         <button type="submit" class="btn">저장</button>
     </form>
 </div>
