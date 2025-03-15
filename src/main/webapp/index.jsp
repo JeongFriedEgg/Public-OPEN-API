@@ -38,8 +38,9 @@
 <body>
 
 <h2>서울시 공공 와이파이 정보 조회</h2>
-
+<a href="index.jsp"><button>홈</button></a>
 <a href="bookmark.jsp"><button>북마크 페이지</button></a>
+<a href="history.jsp"><button>히스토리 페이지</button></a>
 
 <div id="input-section">
     <form method="get" action="index.jsp">

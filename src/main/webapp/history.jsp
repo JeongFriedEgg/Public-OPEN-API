@@ -21,12 +21,16 @@
         th {
             background-color: #f4f4f4;
         }
+        button {
+            padding: 8px 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <h2>북마크 히스토리</h2>
-
+<a href="index.jsp"><button>홈</button></a>
 <%
     WifiInfoService wifiInfoService = new WifiInfoService();
     List<Map<String, String>> historyList = wifiInfoService.getHistory();

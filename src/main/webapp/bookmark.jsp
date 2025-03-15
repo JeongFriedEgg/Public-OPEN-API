@@ -30,6 +30,7 @@
 <body>
 
 <h2>북마크 목록</h2>
+<a href="index.jsp"><button>홈</button></a>
 <a href="addBookmark.jsp" ><button>북마크 추가</button></a>
 <table>
     <thead>
